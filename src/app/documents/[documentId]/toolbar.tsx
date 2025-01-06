@@ -378,7 +378,11 @@ const LinkButton = () => {
         <Link2Icon className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="p-2.5 flex items-center gap-x-2">
-        <Input placeholder="https://example.com" value={value} onChange={(e) => setValue(e.target.value)} />
+        <Input
+          placeholder="https://example.com"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
         <Button onClick={() => onChange(value)}>Apply</Button>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -598,8 +602,8 @@ export const Toolbar = () => {
       {
         label: "Comment",
         icon: MessageSquarePlusIcon,
-        isActive: false, // TODO: Enable this functionality
-        onClick: () => console.log("TODO: Comment"),
+        isActive: editor?.isActive("liveblocksCommentMark"),
+        onClick: () => editor?.chain().focus().addPendingComment().run(),
       },
       {
         label: "List Toto",

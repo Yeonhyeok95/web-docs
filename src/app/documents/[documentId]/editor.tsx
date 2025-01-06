@@ -17,13 +17,20 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import Underline from "@tiptap/extension-underline";
 
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useEditorStore } from "@/store/use-editor-store";
+import { useStorage } from "@liveblocks/react";
 import { Ruler } from "./ruler";
+import { Threads } from "./threads";
 
 export const Editor = () => {
+  const leftMargin = useStorage((root) => root.leftMargin);
+  const rightMargin = useStorage((root) => root.rightMargin);
+
+  const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
 
   const editor = useEditor({
@@ -54,13 +61,16 @@ export const Editor = () => {
     },
     editorProps: {
       attributes: {
-        style: "padding-left: 56px; padding-right: 56px",
+        style: `padding-left: ${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 56}px`,
         class:
           "focus:outline-one print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
     extensions: [
-      StarterKit,
+      liveblocks,
+      StarterKit.configure({
+        history: false,
+      }),
       LineHeightExtension.configure({
         types: ["heading", "paragraph"],
         defaultLineHeight: "normal",
@@ -92,22 +102,6 @@ export const Editor = () => {
       }),
       TaskList,
     ],
-    // content: `
-    //     <table>
-    //       <tbody>
-    //         <tr>
-    //           <th>Name</th>
-    //           <th colspan="3">Description</th>
-    //         </tr>
-    //         <tr>
-    //           <td>Cyndi Lauper</td>
-    //           <td>Singer</td>
-    //           <td>Songwriter</td>
-    //           <td>Actress</td>
-    //         </tr>
-    //       </tbody>
-    //     </table>
-    //   `,
     content: "",
   });
 
@@ -116,6 +110,7 @@ export const Editor = () => {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   );

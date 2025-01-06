@@ -34,10 +34,18 @@ import {
   UnderlineIcon,
   Undo2Icon,
 } from "lucide-react";
+import { Avatars } from "./avatars";
 import { BsFilePdf } from "react-icons/bs";
 import { useEditorStore } from "@/store/use-editor-store";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { Inbox } from "./inbox";
+import { Doc } from "../../../../convex/_generated/dataModel";
 
-export const Navbar = () => {
+interface NavbarProps {
+  data: Doc<"documents">;
+}
+
+export const Navbar = ({ data }: NavbarProps) => {
   const { editor } = useEditorStore();
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run();
@@ -58,7 +66,7 @@ export const Navbar = () => {
     const blob = new Blob([JSON.stringify(content)], {
       type: "application/json",
     });
-    onDownload(blob, `document.json`); // TODO: Use document name
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveHTML = () => {
@@ -68,7 +76,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/html",
     });
-    onDownload(blob, `document.html`); // TODO: Use document name
+    onDownload(blob, `${data.title}.html`);
   };
 
   const onSaveText = () => {
@@ -78,7 +86,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/plain",
     });
-    onDownload(blob, `document.txt`); // TODO: Use document name
+    onDownload(blob, `${data.title}.txt`);
   };
 
   return (
@@ -88,7 +96,7 @@ export const Navbar = () => {
           <Image width={36} height={36} src="/logo.svg" alt="Logo"></Image>
         </Link>
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput title={data.title} id={data._id} />
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               <MenubarMenu>
@@ -163,10 +171,18 @@ export const Navbar = () => {
                   <MenubarSub>
                     <MenubarSubTrigger>Table</MenubarSubTrigger>
                     <MenubarSubContent>
-                      <MenubarItem onClick={() => insertTable({ rows: 1, cols: 1 })}>1 x 1</MenubarItem>
-                      <MenubarItem onClick={() => insertTable({ rows: 2, cols: 2 })}>2 x 2</MenubarItem>
-                      <MenubarItem onClick={() => insertTable({ rows: 3, cols: 3 })}>3 x 3</MenubarItem>
-                      <MenubarItem onClick={() => insertTable({ rows: 4, cols: 4 })}>4 x 4</MenubarItem>
+                      <MenubarItem onClick={() => insertTable({ rows: 1, cols: 1 })}>
+                        1 x 1
+                      </MenubarItem>
+                      <MenubarItem onClick={() => insertTable({ rows: 2, cols: 2 })}>
+                        2 x 2
+                      </MenubarItem>
+                      <MenubarItem onClick={() => insertTable({ rows: 3, cols: 3 })}>
+                        3 x 3
+                      </MenubarItem>
+                      <MenubarItem onClick={() => insertTable({ rows: 4, cols: 4 })}>
+                        4 x 4
+                      </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
                 </MenubarContent>
@@ -210,6 +226,17 @@ export const Navbar = () => {
             </Menubar>
           </div>
         </div>
+      </div>
+      <div className="flex gap-3 items-center">
+        <Avatars />
+        <Inbox />
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
       </div>
     </nav>
   );
