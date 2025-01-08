@@ -35,9 +35,11 @@ export async function POST(req: Request) {
     return new Response("Unauthorized owner and organization memeber", { status: 401 });
   }
 
+  const name = user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous";
+
   const session = liveblocks.prepareSession(user.id, {
     userInfo: {
-      name: user.fullName ?? "Anonymous",
+      name,
       avatar: user.imageUrl,
     },
   });

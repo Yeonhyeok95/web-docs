@@ -6,7 +6,6 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "@liveblocks/react-ui/styles.css";
 import "@liveblocks/react-tiptap/styles.css";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 
 const inter = Inter({

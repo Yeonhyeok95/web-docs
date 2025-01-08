@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/store/use-editor-store";
 import { type Level } from "@tiptap/extension-heading";
-import { type ColorResult, CirclePicker, SketchPicker } from "react-color";
+import { type ColorResult, SketchPicker } from "react-color";
 import {
   AlignCenterIcon,
   AlignJustifyIcon,
@@ -37,18 +37,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
